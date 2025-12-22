@@ -97,7 +97,7 @@ def get_processed_data(filepath):
     
     return process_features(train_df, val_df, test_df)
 
-def preprocess_for_inference(df: pd.DataFrame, encoder_path: str = 'combine-harvest-prediction/encoder.joblib'):
+def preprocess_for_inference(df: pd.DataFrame, encoder_path: str = 'encoder.joblib'):
     """
     Підготовка нових даних для прогнозування.
     1. Очищення та feature engineering.
