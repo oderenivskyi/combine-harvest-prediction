@@ -98,48 +98,37 @@ def get_processed_data(filepath):
 
 import joblib
 
-def preprocess_for_inference(df: pd.DataFrame, encoder_path: str = 'encoder.joblib'):
+def preprocess_for_inference(df: pd.DataFrame, encoder_path: str = 'models/encoder.joblib'):
     """
     Підготовка нових даних для прогнозування.
     1. Очищення та feature engineering.
     2. Кодування категорій (використовуючи збережений encoder).
     """
-    # 1. Базове очищення (як у load_and_clean_data, але без читання файлу)
     cols_to_drop_actual = [c for c in cols_to_drop if c in df.columns]
     df = df.drop(columns=cols_to_drop_actual)
     
-    # Заповнення нулями колонок з опадами, якщо вони є
     existing_rain_cols = [c for c in rain_cols_to_fill if c in df.columns]
     df[existing_rain_cols] = df[existing_rain_cols].fillna(0)
     
     if 'Модель' in df.columns:
         df['Модель'] = df['Модель'].apply(clean_model_name)
     
-    # 2. Feature Engineering
     df = feature_engineering(df)
     
-    # 3. Підготовка ознак (як у process_features)
-    # Завантажуємо навчений encoder
     try:
         encoder = joblib.load(encoder_path)
     except FileNotFoundError:
         raise FileNotFoundError(f"Не знайдено файл {encoder_path}. Спочатку збережіть енкодер з ноутбука.")
 
-    # Визначаємо числові та категоріальні колонки
-    # Важливо: Ми беремо ті самі колонки, на яких вчився encoder
     cat_features = encoder.feature_names_in_.tolist()
     
-    # Числові ознаки (ті, що залишились і не є категоріальними, і не є цільовою або датою)
     exclude_cols = cat_features + ['date_time', 'Зібрано_га', 'Прогноз_га']
     num_features = [c for c in df.columns if c not in exclude_cols and df[c].dtype in ['int64', 'float64']]
     
-    # Кодування категорій
     encoded_data = encoder.transform(df[cat_features])
     encoded_cols = list(encoder.get_feature_names_out(cat_features))
     encoded_df = pd.DataFrame(encoded_data, columns=encoded_cols, index=df.index)
     
-    # Об'єднання
     X = pd.concat([df[num_features], encoded_df], axis=1)
     
-    # Повертаємо X для моделі та оригінальний df для відображення результатів
     return X, df

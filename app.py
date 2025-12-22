@@ -14,7 +14,8 @@ st.set_page_config(
 
 @st.cache_resource
 def load_model():
-    model = joblib.load('xgb_reg_model.joblib')
+    # model = joblib.load('xgb_reg_model.joblib')
+    model = joblib.load('models/xgb_reg_model.joblib')
     return model
 
 try:
@@ -94,5 +95,4 @@ if uploaded_file is not None:
         st.error(f"Не вдалося прочитати файл: {e}")
 
 else:
-    # Повідомлення, якщо файл не завантажено (займає основний простір, поки пусто)
     st.info("👈 Для початку роботи завантажте файл у панелі зліва.")
