@@ -97,8 +97,6 @@ def get_processed_data(filepath):
     
     return process_features(train_df, val_df, test_df)
 
-import joblib
-
 def preprocess_for_inference(df: pd.DataFrame, encoder_path: str = 'models/encoder.joblib'):
     """
     Підготовка нових даних для прогнозування.
