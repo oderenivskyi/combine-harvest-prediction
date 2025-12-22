@@ -47,7 +47,7 @@ if uploaded_file is not None:
         if st.button("Зробити прогноз", type="primary"):
             with st.spinner('Йде розрахунок прогнозу...'):
                 try:
-                    X_input, df_processed = preprocess_for_inference(df_raw, 'encoder.joblib')
+                    X_input, df_processed = preprocess_for_inference(df_raw, 'models/encoder.joblib')
                     
                     predictions = model.predict(X_input)
                     
