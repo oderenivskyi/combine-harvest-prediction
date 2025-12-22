@@ -97,7 +97,7 @@ def get_processed_data(filepath):
     
     return process_features(train_df, val_df, test_df)
 
-def preprocess_for_inference(df: pd.DataFrame, encoder_path: str = 'encoder.joblib'):
+def preprocess_for_inference(df: pd.DataFrame, encoder_path: str = 'models/encoder.joblib'):
     """
     Підготовка нових даних для прогнозування.
     1. Очищення та feature engineering.
@@ -130,4 +130,5 @@ def preprocess_for_inference(df: pd.DataFrame, encoder_path: str = 'encoder.jobl
     
     X = pd.concat([df[num_features], encoded_df], axis=1)
     
+
     return X, df
