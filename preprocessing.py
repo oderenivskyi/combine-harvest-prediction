@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
+import joblib
 
 cols_to_drop = [
     'Культура', 
